@@ -42,6 +42,8 @@ namespace NeuralNetwork::Math
 
         Matrix<T>& MultAndStoreThis(const Matrix<T>& lhv, const Matrix<T>& rhv);
 
+        Matrix<T>& ApplyFunction(T(*func)(T));
+
         T& operator()(int row, int col);
         const T& operator()(int row, int col) const;
 

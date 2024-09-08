@@ -218,6 +218,19 @@ namespace NeuralNetwork::Math
     }
 
     template<typename T>
+    Matrix<T>& Matrix<T>::ApplyFunction(T(*func)(T))
+    {
+
+        for (int row = 0; row < _rows; row++)
+        {
+            for (int col = 0; col < _cols; col++)
+            {
+                _matrix[row][col] = func(_matrix[row][col]);
+            }
+        }
+    }
+
+    template<typename T>
     T& Matrix<T>::operator()(int row, int col)
     {
         return _matrix[row][col];
