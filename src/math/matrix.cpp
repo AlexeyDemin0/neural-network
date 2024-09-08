@@ -351,7 +351,7 @@ namespace NeuralNetwork::Math
                 {
                     sum += _matrix[row][k] * other._matrix[k][col];
                 }
-                outMatrix[row][col] += sum;
+                outMatrix[row][col] = sum;
             }
         }
         return outMatrix;
