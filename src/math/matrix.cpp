@@ -231,6 +231,32 @@ namespace NeuralNetwork::Math
     }
 
     template<typename T>
+    Matrix<T>& Matrix<T>::AddRow(const Matrix<T>& row, int rowIndex)
+    {
+        if (_cols != row._cols)
+            throw std::invalid_argument("Columns count not match");
+
+        for (int col = 0; col < _cols; col++)
+        {
+            _matrix[rowIndex][col] += row._matrix[rowIndex][col];
+        }
+        return *this;
+    }
+
+    template<typename T>
+    Matrix<T>& Matrix<T>::AddCol(const Matrix<T>& col, int colIndex)
+    {
+        if (_rows != row._rows)
+            throw std::invalid_argument("Rows count not match");
+
+        for (int row = 0; row < _rows; row++)
+        {
+            _matrix[row][colIndex] += col._matrix[row][colIndex];
+        }
+        return *this;
+    }
+
+    template<typename T>
     T& Matrix<T>::operator()(int row, int col)
     {
         return _matrix[row][col];
@@ -248,10 +274,12 @@ namespace NeuralNetwork::Math
         if (this == &other)
             return *this;
 
-        _rows = other._rows;
-        _cols = other._cols;
-
-        AllocMatrix();
+        if (_rows != other._rows || _cols != other._cols)
+        {
+            _rows = other._rows;
+            _cols = other._cols;
+            AllocMatrix();
+        }
 
         for (int row = 0; row < _rows; row++)
         {

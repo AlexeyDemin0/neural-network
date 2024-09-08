@@ -44,6 +44,9 @@ namespace NeuralNetwork::Math
 
         Matrix<T>& ApplyFunction(T(*func)(T));
 
+        Matrix<T>& AddRow(const Matrix<T>& row, int rowIndex);
+        Matrix<T>& AddCol(const Matrix<T>& col, int colIndex);
+
         T& operator()(int row, int col);
         const T& operator()(int row, int col) const;
 
