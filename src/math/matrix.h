@@ -40,6 +40,8 @@ namespace NeuralNetwork::Math
         Matrix<T> Transpose() const;
         Matrix<T>& TransposeThis();
 
+        Matrix<T>& MultAndStoreThis(const Matrix<T>& lhv, const Matrix<T>& rhv);
+
         T& operator()(int row, int col);
         const T& operator()(int row, int col) const;
 

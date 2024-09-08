@@ -194,6 +194,30 @@ namespace NeuralNetwork::Math
     }
 
     template<typename T>
+    Matrix<T>& Matrix<T>::MultAndStoreThis(const Matrix<T>& lhv, const Matrix<T>& rhv)
+    {
+        if (lhv._cols != rhv._rows)
+            throw std::invalid_argument("The number of columns of the left matrix must be equal to the number of rows of the right matrix for multiplication.");
+
+        if (_rows != lhv._rows && _cols != rhv._cols)
+            throw std::invalid_argument("Size of matrix after multiply not equal size of current matrix");
+
+        for (int row = 0; row < _rows; row++)
+        {
+            for (int col = 0; col < other._cols; col++)
+            {
+                T sum = 0;
+                for (int k = 0; k < _cols; k++)
+                {
+                    sum = lhv._matrix[row][k] * rhv._matrix[k][col];
+                }
+                _matrix[row][col] = sum;
+            }
+        }
+        return *this;
+    }
+
+    template<typename T>
     T& Matrix<T>::operator()(int row, int col)
     {
         return _matrix[row][col];
