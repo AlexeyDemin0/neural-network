@@ -4,19 +4,19 @@
 
 namespace NeuralNetwork
 {
-    Perceptron::Perceptron(std::vector<int> neuronsCountPerLayer) : _cacheIsInitialized(false)
+    Perceptron::Perceptron(const std::vector<int>& neuronsCountPerLayer) : _cacheIsInitialized(false)
     {
         if (neuronsCountPerLayer.size() < 1)
             throw std::invalid_argument("Neuron layers count must be more than 1");
 
-        _layers.reserve(neuronsCountPerLayer.size());
+        _layers.resize(neuronsCountPerLayer.size());
         for (int i = 0; i < neuronsCountPerLayer.size(); i++)
         {
             _layers[i] = Math::Matrix<NN_TYPE>(neuronsCountPerLayer[i], 1, false);
         }
 
-        _weights.reserve(neuronsCountPerLayer.size() - 1);
-        _bias.reserve(neuronsCountPerLayer.size() - 1);
+        _weights.resize(neuronsCountPerLayer.size() - 1);
+        _bias.resize(neuronsCountPerLayer.size() - 1);
         for (int i = 0; i < neuronsCountPerLayer.size() - 1; i++)
         {
             int neuronsCount = neuronsCountPerLayer[i];

@@ -23,7 +23,7 @@ namespace NeuralNetwork
         bool _cacheIsInitialized;
 
     public:
-        Perceptron(std::vector<int> neuronsCountPerLayer);
+        Perceptron(const std::vector<int>& neuronsCountPerLayer);
 
         void SetInputValues(const Math::Matrix<NN_TYPE>& inputValues);
 
