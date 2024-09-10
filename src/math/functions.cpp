@@ -13,31 +13,38 @@ namespace NeuralNetwork::Math::Functions
     template<typename T>
     T LinearDerivative(T x)
     {
-        return 1;
+        return static_cast<T>(1.0);
     }
 
     template<typename T>
     T BinaryStep(T x)
     {
-        return x < 0.0f ? 0.0f : 1.0f;
+        return x < static_cast<T>(0.0) ? static_cast<T>(0.0) : static_cast<T>(1.0);
     }
 
     template<typename T>
     T BinaryStepDerivative(T x)
     {
-        return 0;
+        return static_cast<T>(0.0);
     }
 
     template<typename T>
     T Sigmoid(T x)
     {
-        return 1.0f / (1.0f - exp(-x));
+        return static_cast<T>(1.0) / (static_cast<T>(1.0) - exp(-x));
     }
 
     template<typename T>
     T SigmoidDerivative(T x)
     {
-        return Sigmoid(x) * (1.0f - Sigmoid(x));
+        T y = Sigmoid(x);
+        return y * (static_cast<T>(1.0) - y);
+    }
+
+    template<typename T>
+    T SigmoidDerivativeOptimized(T y)
+    {
+        return y * (static_cast<T>(1.0) - y);
     }
 
     template<typename T>
@@ -51,18 +58,25 @@ namespace NeuralNetwork::Math::Functions
     template<typename T>
     T HyperbolicTangentDerivative(T x)
     {
-        return T();
+        T y = HyperbolicTangent(x);
+        return static_cast<T>(1.0) - y * y;
+    }
+
+    template<typename T>
+    T HyperbolicTangentDerivativeOptimized(T y)
+    {
+        return static_cast<T>(1.0) - y * y;
     }
 
     template<typename T, T alpha>
     T ReLU(T x)
     {
-        return x < 0.0f ? alpha * x : x;
+        return x < static_cast<T>(0.0) ? alpha * x : x;
     }
 
     template<typename T, T alpha>
     T ReLUDerivative(T x)
     {
-        return x < 0.0f ? alpha : 1.0f;
+        return x < static_cast<T>(0.0) ? alpha : static_cast<T>(1.0);
     }
 }
