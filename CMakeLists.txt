@@ -5,6 +5,14 @@ set(PROJECT_NAME "neural-network")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(ENABLE_DEBUG "Enable debug information" OFF)
+
+if(${ENABLE_DEBUG})
+	set(CMAKE_BUILD_TYPE "Debug")
+else()
+	set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 project(${PROJECT_NAME})
 
 add_library(${PROJECT_NAME} STATIC
