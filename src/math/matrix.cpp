@@ -579,4 +579,7 @@ namespace NeuralNetwork::Math
             }
         }
     }
+
+    template class Matrix<float>;
+    template class Matrix<double>;
 }
