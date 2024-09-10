@@ -5,6 +5,12 @@
 namespace NeuralNetwork::Math
 {
     template<typename T>
+    Matrix<T>::Matrix() : _rows(1), _cols(1), _matrix(nullptr)
+    {
+        AllocMatrix();
+    }
+
+    template<typename T>
     Matrix<T>::Matrix(int rows, int cols, bool fillZero) : _rows(rows), _cols(cols), _matrix(nullptr)
     {
         AllocMatrix();
@@ -566,6 +572,7 @@ namespace NeuralNetwork::Math
             }
             stream << std::endl;
         }
+        return stream;
     }
 
     template<typename T>
@@ -578,6 +585,7 @@ namespace NeuralNetwork::Math
                 stream >> matrix._matrix[row][col];
             }
         }
+        return stream;
     }
 
     template class Matrix<float>;

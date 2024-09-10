@@ -15,6 +15,7 @@ namespace NeuralNetwork::Math
         T** _matrix;
 
     public:
+        Matrix();
         Matrix(int rows, int cols, bool fillZero = true);
         Matrix(int rows, int cols, T** data);
         Matrix(std::initializer_list<std::initializer_list<T>> init_list);
