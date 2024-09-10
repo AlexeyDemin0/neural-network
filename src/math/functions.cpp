@@ -33,7 +33,7 @@ namespace NeuralNetwork::Math::Functions
     template<typename T>
     T Sigmoid(T x)
     {
-        return static_cast<T>(1.0) / (static_cast<T>(1.0) - exp(-x));
+        return static_cast<T>(1.0) / (static_cast<T>(1.0) + exp(-x));
     }
 
     template<typename T>
