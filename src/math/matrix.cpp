@@ -64,6 +64,7 @@ namespace NeuralNetwork::Math
                 _matrix[row][col] = *((init_list.begin() + row)->begin() + col);
             }
         }
+        return *this;
     }
 
     template<typename T>
@@ -111,12 +112,12 @@ namespace NeuralNetwork::Math
         if (_rows != other._rows || _cols != other._cols)
             throw std::invalid_argument("Rows and Columns not equal");
 
-        Matrix<T> outMatrix;
+        Matrix<T> outMatrix(_rows, _cols);
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _cols; col++)
             {
-                outMatrix[row][col] = _matrix[row][col] * other._matrix[row][col];
+                outMatrix._matrix[row][col] = _matrix[row][col] * other._matrix[row][col];
             }
         }
         return outMatrix;
@@ -204,7 +205,7 @@ namespace NeuralNetwork::Math
 
         for (int row = 0; row < _rows; row++)
         {
-            for (int col = 0; col < other._cols; col++)
+            for (int col = 0; col < _cols; col++)
             {
                 T sum = 0;
                 for (int k = 0; k < _cols; k++)
@@ -220,7 +221,6 @@ namespace NeuralNetwork::Math
     template<typename T>
     Matrix<T>& Matrix<T>::ApplyFunction(T(*func)(T))
     {
-
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _cols; col++)
@@ -228,6 +228,7 @@ namespace NeuralNetwork::Math
                 _matrix[row][col] = func(_matrix[row][col]);
             }
         }
+        return *this;
     }
 
     template<typename T>
@@ -246,7 +247,7 @@ namespace NeuralNetwork::Math
     template<typename T>
     Matrix<T>& Matrix<T>::AddCol(const Matrix<T>& col, int colIndex)
     {
-        if (_rows != row._rows)
+        if (_rows != col._rows)
             throw std::invalid_argument("Rows count not match");
 
         for (int row = 0; row < _rows; row++)
@@ -392,7 +393,7 @@ namespace NeuralNetwork::Math
                 {
                     sum += _matrix[row][k] * other._matrix[k][col];
                 }
-                outMatrix[row][col] = sum;
+                outMatrix._matrix[row][col] = sum;
             }
         }
         return outMatrix;
