@@ -166,7 +166,7 @@ namespace NeuralNetwork::Math
     template<typename T>
     Matrix<T> Matrix<T>::Transpose() const
     {
-        Matrix<T> outMatrix;
+        Matrix<T> outMatrix(_cols, _rows);
         for (int row = 0; row < _rows; row++)
         {
             for (int col = 0; col < _cols; col++)
@@ -450,6 +450,52 @@ namespace NeuralNetwork::Math
             }
         }
         return *this;
+    }
+
+    template<typename T>
+    void Matrix<T>::MultTransposedToMatrixAndStoreTo(const Matrix<T>& lhv, const Matrix<T>& rhv, Matrix<T>& storeTo)
+    {
+        if (lhv._rows != rhv._rows)
+            throw std::invalid_argument("The number of rows of the left matrix must be equal to the number of rows of the right matrix for multiplication.");
+
+        if (storeTo._rows != lhv._cols || storeTo._cols != rhv._cols)
+            throw std::invalid_argument("Size of result matrix not equal size of matrix after multiplication.");
+
+        for (int row = 0; row < lhv._cols; row++)
+        {
+            for (int col = 0; col < lhv._rows; col++)
+            {
+                T sum = 0;
+                for (int k = 0; k < lhv._rows; k++)
+                {
+                    sum += lhv._matrix[k][row] * rhv._matrix[k][col];
+                }
+                storeTo._matrix[row][col] = sum;
+            }
+        }
+    }
+
+    template<typename T>
+    void Matrix<T>::MultMatrixToTransposedAndStoreTo(const Matrix<T>& lhv, const Matrix<T>& rhv, Matrix<T>& storeTo)
+    {
+        if (lhv._cols != rhv._cols)
+            throw std::invalid_argument("The number of columns of the left matrix must be equal to the number of columns of the right matrix for multiplication.");
+
+        if (storeTo._rows != lhv._rows || storeTo._cols != rhv._rows)
+            throw std::invalid_argument("Size of result matrix not equal size of matrix after multiplication.");
+
+        for (int row = 0; row < rhv._cols; row++)
+        {
+            for (int col = 0; col < rhv._rows; col++)
+            {
+                T sum = 0;
+                for (int k = 0; k < lhv._rows; k++)
+                {
+                    sum += lhv._matrix[row][k] * rhv._matrix[col][k];
+                }
+                storeTo._matrix[row][col] = sum;
+            }
+        }
     }
 
     template<typename T>

@@ -63,6 +63,9 @@ namespace NeuralNetwork::Math
         Matrix<T> operator/(T value) const;
         Matrix<T>& operator/=(T value);
 
+        static void MultTransposedToMatrixAndStoreTo(const Matrix<T>& lhv, const Matrix<T>& rhv, Matrix<T>& storeTo);
+        static void MultMatrixToTransposedAndStoreTo(const Matrix<T>& lhv, const Matrix<T>& rhv, Matrix<T>& storeTo);
+
         friend Matrix<T> operator*(T value, const Matrix<T>& rhv);
         friend Matrix<T> operator/(T value, const Matrix<T>& rhv);
 
