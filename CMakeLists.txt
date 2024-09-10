@@ -15,13 +15,4 @@ endif()
 
 project(${PROJECT_NAME})
 
-add_library(${PROJECT_NAME} STATIC
-	"src/math/matrix.h"
-	"src/math/matrix.cpp"
-	"src/perceptron.h"
-	"src/perceptron.cpp"
-	"src/math/functions.h"
-	"src/math/functions.cpp"
-)
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+add_subdirectory(src)
