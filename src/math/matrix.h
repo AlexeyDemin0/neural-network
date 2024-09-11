@@ -67,11 +67,15 @@ namespace NeuralNetwork::Math
         static void MultTransposedToMatrixAndStoreTo(const Matrix<T>& lhv, const Matrix<T>& rhv, Matrix<T>& storeTo);
         static void MultMatrixToTransposedAndStoreTo(const Matrix<T>& lhv, const Matrix<T>& rhv, Matrix<T>& storeTo);
 
-        friend Matrix<T> operator*(T value, const Matrix<T>& rhv);
-        friend Matrix<T> operator/(T value, const Matrix<T>& rhv);
+        template<typename U>
+        friend Matrix<U> operator*(U value, const Matrix<U>& rhv);
+        template<typename U>
+        friend Matrix<U> operator/(U value, const Matrix<U>& rhv);
 
-        friend std::ostream& operator<<(std::ostream& stream, const Matrix<T>& matrix);
-        friend std::istream& operator>>(std::istream& stream, Matrix<T>& matrix);
+        template<typename U>
+        friend std::ostream& operator<<(std::ostream& stream, const Matrix<U>& matrix);
+        template<typename U>
+        friend std::istream& operator>>(std::istream& stream, Matrix<U>& matrix);
 
     private:
         void AllocMatrix();

@@ -590,4 +590,16 @@ namespace NeuralNetwork::Math
 
     template class Matrix<float>;
     template class Matrix<double>;
+
+    template Matrix<float> operator*(float value, const Matrix<float>& rhv);
+    template Matrix<double> operator*(double value, const Matrix<double>& rhv);
+
+    template Matrix<float> operator/(float value, const Matrix<float>& rhv);
+    template Matrix<double> operator/(double value, const Matrix<double>& rhv);
+
+    template std::ostream& operator<<(std::ostream& stream, const Matrix<float>& matrix);
+    template std::ostream& operator<<(std::ostream& stream, const Matrix<double>& matrix);
+
+    template std::istream& operator>>(std::istream& stream, Matrix<float>& matrix);
+    template std::istream& operator>>(std::istream& stream, Matrix<double>& matrix);
 }
