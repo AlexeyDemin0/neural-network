@@ -568,7 +568,7 @@ namespace NeuralNetwork::Math
         {
             for (int col = 0; col < matrix._cols; col++)
             {
-                stream << matrix._matrix[row][col];
+                stream << matrix._matrix[row][col] << " ";
             }
             stream << std::endl;
         }
