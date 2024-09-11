@@ -26,6 +26,30 @@ namespace NeuralNetwork
         }
     }
 
+    void Perceptron::RandomizeWeights(unsigned int seed, NN_TYPE lowerBorder, NN_TYPE upperBorder)
+    {
+        srand(seed);
+        NN_TYPE dist = upperBorder - lowerBorder;
+
+        for (int i = 0; i < _weights.size(); i++)
+        {
+            for (int row = 0; row < _weights[i].GetRows(); row++)
+            {
+                for (int col = 0; col < _weights[i].GetCols(); col++)
+                {
+                    NN_TYPE randValue = rand() / static_cast<NN_TYPE>(RAND_MAX);
+                    _weights[i](row, col) = randValue * dist + lowerBorder;
+                }
+            }
+
+            for (int row = 0; row < _bias[i].GetRows(); row++)
+            {
+                NN_TYPE randValue = rand() / static_cast<NN_TYPE>(RAND_MAX);
+                _bias[i](row, 0) = randValue * dist + lowerBorder;
+            }
+        }
+    }
+
     void Perceptron::SetInputValues(const Math::Matrix<NN_TYPE>& inputValues)
     {
         _layers[0] = inputValues;
@@ -112,10 +136,10 @@ namespace NeuralNetwork
         _cacheIsInitialized = true;
 
         int layersCount = _layers.size();
-        _derivatives.reserve(layersCount);
-        _deltas.reserve(layersCount);
-        _deltasWeights.reserve(layersCount - 1);
-        _deltasBias.reserve(layersCount - 1);
+        _derivatives.resize(layersCount);
+        _deltas.resize(layersCount);
+        _deltasWeights.resize(layersCount - 1);
+        _deltasBias.resize(layersCount - 1);
 
         for (int i = 0; i < layersCount; i++)
         {

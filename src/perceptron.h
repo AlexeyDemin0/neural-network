@@ -25,6 +25,8 @@ namespace NeuralNetwork
     public:
         Perceptron(const std::vector<int>& neuronsCountPerLayer);
 
+        void RandomizeWeights(unsigned int seed, NN_TYPE lowerBorder, NN_TYPE upperBorder);
+
         void SetInputValues(const Math::Matrix<NN_TYPE>& inputValues);
 
         const Math::Matrix<NN_TYPE>& ForwardPropagation(NN_TYPE(*activationFunction)(NN_TYPE));
