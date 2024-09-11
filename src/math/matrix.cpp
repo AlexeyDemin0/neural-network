@@ -569,7 +569,7 @@ namespace NeuralNetwork::Math
         {
             for (int col = 0; col < matrix._cols; col++)
             {
-                stream << std::setprecision(2) << std::scientific << matrix._matrix[row][col] << " ";
+                stream << std::setprecision(5) << std::scientific << matrix._matrix[row][col] << " ";
             }
             stream << std::endl;
         }
