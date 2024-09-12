@@ -469,9 +469,9 @@ namespace NeuralNetwork::Math
         if (storeTo._rows != lhv._cols || storeTo._cols != rhv._cols)
             throw std::invalid_argument("Size of result matrix not equal size of matrix after multiplication.");
 
-        for (int row = 0; row < lhv._cols; row++)
+        for (int row = 0; row < storeTo._rows; row++)
         {
-            for (int col = 0; col < lhv._rows; col++)
+            for (int col = 0; col < storeTo._cols; col++)
             {
                 T sum = 0;
                 for (int k = 0; k < lhv._rows; k++)
@@ -492,12 +492,12 @@ namespace NeuralNetwork::Math
         if (storeTo._rows != lhv._rows || storeTo._cols != rhv._rows)
             throw std::invalid_argument("Size of result matrix not equal size of matrix after multiplication.");
 
-        for (int row = 0; row < rhv._cols; row++)
+        for (int row = 0; row < storeTo._rows; row++)
         {
-            for (int col = 0; col < rhv._rows; col++)
+            for (int col = 0; col < storeTo._cols; col++)
             {
                 T sum = 0;
-                for (int k = 0; k < lhv._rows; k++)
+                for (int k = 0; k < lhv._cols; k++)
                 {
                     sum += lhv._matrix[row][k] * rhv._matrix[col][k];
                 }
