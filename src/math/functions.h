@@ -26,8 +26,8 @@ namespace NeuralNetwork::Math::Functions
     template<typename T>
     T HyperbolicTangentDerivativeOptimized(T y);
 
-    template<typename T, T alpha>
+    template<typename T>
     T ReLU(T x);
-    template<typename T, T alpha>
+    template<typename T>
     T ReLUDerivative(T x);
 }
