@@ -215,9 +215,9 @@ namespace NeuralNetwork::Math
             for (int col = 0; col < _cols; col++)
             {
                 T sum = 0;
-                for (int k = 0; k < _cols; k++)
+                for (int k = 0; k < lhv._cols; k++)
                 {
-                    sum = lhv._matrix[row][k] * rhv._matrix[k][col];
+                    sum += lhv._matrix[row][k] * rhv._matrix[k][col];
                 }
                 _matrix[row][col] = sum;
             }
