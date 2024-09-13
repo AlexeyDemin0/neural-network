@@ -58,6 +58,21 @@ namespace NeuralNetwork
         _layers[0] = inputValues;
     }
 
+    //
+    // Algorithm of forward propagation:
+    // [LaTeX-like syntax]:
+    //      z^l = W^l * a^{l-1} + b^l
+    //      a^l = \sigma(z^l)
+    // where:
+    //      l - layer index.
+    //      z^l - weighted sum of the neuron inputs.
+    //      \sigma(x) - activation function.  
+    //      W^l - matrix of weights between layers (l) and (l-1), dimension are R^{N(l)xN(l-1)} 
+    //          where N(l) is the number of neurons in layer (l).
+    //      b^l - bias term for the layer.
+    // Note:
+    //      Indexes in code may not match.
+    //
     template<typename T>
     const Math::Matrix<T>& Perceptron<T>::ForwardPropagation(T(*activationFunction)(T))
     {
@@ -71,6 +86,11 @@ namespace NeuralNetwork
         return _layers[_layers.size() - 1];
     }
 
+    //
+    // This is forward propagation with saving derivatives for use in backward propagation.
+    // Param @cacheAfterActivationFunction is used to save the derivative after the activation function, 
+    //      which is helpful for calculating the derivative of the Sigmoid or Hyperbolic Tangent functions.
+    // 
     template<typename T>
     const Math::Matrix<T>& Perceptron<T>::ForwardPropagationWithCache(T(*activationFunction)(T), T(*derivativeFunction)(T), bool cacheAfterActivationFunction)
     {
@@ -99,6 +119,31 @@ namespace NeuralNetwork
         return _layers[_layers.size() - 1];
     }
 
+    //
+    // Algorithm of backward propagation:
+    // [LaTeX-like syntax]:
+    //      Delta calculation for last layer (L):
+    //      \delta^l = dL/da^L \odot \sigma'(z^L)
+    //      
+    //      Delta calculation for hidden layers (l):
+    //      \delta^l = (W^{l+1})^T * \delta^{l+1} \odot \sigma'(z^l)
+    // 
+    //      Calculation of partial derivatives of L:
+    //      dL/dW^l = \delta^l * (a^{l-1})^T
+    //      dL/db^l = \delta^l
+    // 
+    //      Weights adjustment:
+    //      W^l <- W^l - k * dL/dW^l
+    //      b^l <- b^l - k * dL/db^l
+    // where:
+    //      [the same definitions as in forward propagation]
+    //      \delta^l - gradient of the loss function with respect to the weighted sums at layer l.
+    //      dL/dW^l - gradient of the loss function with respect to the weights at layers between (l) and (l-1).
+    //      dL/db^l - gradient of the loss function with respect to the bias term at layers between (l) and (l-1).
+    //      L - loss function (MSE in current implementation)
+    // Note:
+    //      Indexes in code may not match.
+    //
     template<typename T>
     void Perceptron<T>::BackwardPropagation(const Math::Matrix<T>& idealValues, T learningRate)
     {
