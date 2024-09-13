@@ -4,7 +4,8 @@
 
 namespace NeuralNetwork
 {
-    Perceptron::Perceptron(const std::vector<int>& neuronsCountPerLayer) : _cacheIsInitialized(false)
+    template<typename T>
+    Perceptron<T>::Perceptron(const std::vector<int>& neuronsCountPerLayer) : _cacheIsInitialized(false)
     {
         if (neuronsCountPerLayer.size() < 1)
             throw std::invalid_argument("Neuron layers count must be more than 1");
@@ -12,7 +13,7 @@ namespace NeuralNetwork
         _layers.resize(neuronsCountPerLayer.size());
         for (int i = 0; i < neuronsCountPerLayer.size(); i++)
         {
-            _layers[i] = Math::Matrix<NN_TYPE>(neuronsCountPerLayer[i], 1, false);
+            _layers[i] = Math::Matrix<T>(neuronsCountPerLayer[i], 1, false);
         }
 
         _weights.resize(neuronsCountPerLayer.size() - 1);
@@ -21,15 +22,16 @@ namespace NeuralNetwork
         {
             int neuronsCountCurrent = neuronsCountPerLayer[i];
             int neuronsCountNext = neuronsCountPerLayer[i + 1];
-            _weights[i] = Math::Matrix<NN_TYPE>(neuronsCountNext, neuronsCountCurrent, false);
-            _bias[i] = Math::Matrix<NN_TYPE>(neuronsCountNext, 1, false);
+            _weights[i] = Math::Matrix<T>(neuronsCountNext, neuronsCountCurrent, false);
+            _bias[i] = Math::Matrix<T>(neuronsCountNext, 1, false);
         }
     }
 
-    void Perceptron::RandomizeWeights(unsigned int seed, NN_TYPE lowerBorder, NN_TYPE upperBorder)
+    template<typename T>
+    void Perceptron<T>::RandomizeWeights(unsigned int seed, T lowerBorder, T upperBorder)
     {
         srand(seed);
-        NN_TYPE dist = upperBorder - lowerBorder;
+        T dist = upperBorder - lowerBorder;
 
         for (int i = 0; i < _weights.size(); i++)
         {
@@ -37,25 +39,27 @@ namespace NeuralNetwork
             {
                 for (int col = 0; col < _weights[i].GetCols(); col++)
                 {
-                    NN_TYPE randValue = rand() / static_cast<NN_TYPE>(RAND_MAX);
+                    T randValue = rand() / static_cast<T>(RAND_MAX);
                     _weights[i](row, col) = randValue * dist + lowerBorder;
                 }
             }
 
             for (int row = 0; row < _bias[i].GetRows(); row++)
             {
-                NN_TYPE randValue = rand() / static_cast<NN_TYPE>(RAND_MAX);
+                T randValue = rand() / static_cast<T>(RAND_MAX);
                 _bias[i](row, 0) = randValue * dist + lowerBorder;
             }
         }
     }
 
-    void Perceptron::SetInputValues(const Math::Matrix<NN_TYPE>& inputValues)
+    template<typename T>
+    void Perceptron<T>::SetInputValues(const Math::Matrix<T>& inputValues)
     {
         _layers[0] = inputValues;
     }
 
-    const Math::Matrix<NN_TYPE>& Perceptron::ForwardPropagation(NN_TYPE(*activationFunction)(NN_TYPE))
+    template<typename T>
+    const Math::Matrix<T>& Perceptron<T>::ForwardPropagation(T(*activationFunction)(T))
     {
         for (int i = 0; i < _layers.size() - 1; i++)
         {
@@ -67,7 +71,8 @@ namespace NeuralNetwork
         return _layers[_layers.size() - 1];
     }
 
-    const Math::Matrix<NN_TYPE>& Perceptron::ForwardPropagationWithCache(NN_TYPE(*activationFunction)(NN_TYPE), NN_TYPE(*derivativeFunction)(NN_TYPE), bool cacheAfterActivationFunction)
+    template<typename T>
+    const Math::Matrix<T>& Perceptron<T>::ForwardPropagationWithCache(T(*activationFunction)(T), T(*derivativeFunction)(T), bool cacheAfterActivationFunction)
     {
         if (!_cacheIsInitialized)
             throw std::exception("Cache is not initialized. Use InitTrainCache() method.");
@@ -94,25 +99,26 @@ namespace NeuralNetwork
         return _layers[_layers.size() - 1];
     }
 
-    void Perceptron::BackwardPropagation(const Math::Matrix<NN_TYPE>& idealValues, NN_TYPE learningRate)
+    template<typename T>
+    void Perceptron<T>::BackwardPropagation(const Math::Matrix<T>& idealValues, T learningRate)
     {
         int layerIndex = _layers.size() - 2;
         _deltas[layerIndex] = _layers[layerIndex + 1];
         _deltas[layerIndex] -= idealValues;
-        _deltas[layerIndex] *= static_cast<NN_TYPE>(2.0);
+        _deltas[layerIndex] *= static_cast<T>(2.0);
         _deltas[layerIndex].HadamardProductThis(_derivatives[layerIndex]);
 
-        Math::Matrix<NN_TYPE>::MultMatrixToTransposedAndStoreTo(_deltas[layerIndex], _layers[layerIndex], _deltasWeights[layerIndex]);
+        Math::Matrix<T>::MultMatrixToTransposedAndStoreTo(_deltas[layerIndex], _layers[layerIndex], _deltasWeights[layerIndex]);
         _deltasBias[layerIndex] = _deltas[layerIndex];
         layerIndex--;
 
         // Hidden layers
         for (; layerIndex > 0; layerIndex--)
         {
-            Math::Matrix<NN_TYPE>::MultTransposedToMatrixAndStoreTo(_weights[layerIndex + 1], _deltas[layerIndex + 1], _deltas[layerIndex]);
+            Math::Matrix<T>::MultTransposedToMatrixAndStoreTo(_weights[layerIndex + 1], _deltas[layerIndex + 1], _deltas[layerIndex]);
             _deltas[layerIndex].HadamardProductThis(_derivatives[layerIndex]);
 
-            Math::Matrix<NN_TYPE>::MultMatrixToTransposedAndStoreTo(_deltas[layerIndex], _layers[layerIndex], _deltasWeights[layerIndex]);
+            Math::Matrix<T>::MultMatrixToTransposedAndStoreTo(_deltas[layerIndex], _layers[layerIndex], _deltasWeights[layerIndex]);
             _deltasBias[layerIndex] = _deltas[layerIndex];
         }
 
@@ -127,7 +133,8 @@ namespace NeuralNetwork
         }
     }
 
-    void Perceptron::InitTrainCache()
+    template<typename T>
+    void Perceptron<T>::InitTrainCache()
     {
         if (_cacheIsInitialized)
             ClearTrainCache();
@@ -145,14 +152,15 @@ namespace NeuralNetwork
             int neuronsCountCurrent = _layers[i].GetRows();
             int neuronsCountNext = _layers[i + 1].GetRows();
 
-            _derivatives[i] = Math::Matrix<NN_TYPE>(_layers[i + 1].GetRows(), 1, false);
-            _deltas[i] = Math::Matrix<NN_TYPE>(_layers[i + 1].GetRows(), 1, false);
-            _deltasWeights[i] = Math::Matrix<NN_TYPE>(neuronsCountNext, neuronsCountCurrent, false);
-            _deltasBias[i] = Math::Matrix<NN_TYPE>(neuronsCountNext, 1, false);
+            _derivatives[i] = Math::Matrix<T>(_layers[i + 1].GetRows(), 1, false);
+            _deltas[i] = Math::Matrix<T>(_layers[i + 1].GetRows(), 1, false);
+            _deltasWeights[i] = Math::Matrix<T>(neuronsCountNext, neuronsCountCurrent, false);
+            _deltasBias[i] = Math::Matrix<T>(neuronsCountNext, 1, false);
         }
     }
 
-    void Perceptron::ClearTrainCache()
+    template<typename T>
+    void Perceptron<T>::ClearTrainCache()
     {
         _cacheIsInitialized = false;
         _derivatives.clear();
@@ -160,4 +168,7 @@ namespace NeuralNetwork
         _deltasWeights.clear();
         _deltasBias.clear();
     }
+
+    template class Perceptron<float>;
+    template class Perceptron<double>;
 }
