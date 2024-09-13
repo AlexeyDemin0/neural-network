@@ -141,6 +141,7 @@ namespace NeuralNetwork
     //      dL/dW^l - gradient of the loss function with respect to the weights at layers between (l) and (l-1).
     //      dL/db^l - gradient of the loss function with respect to the bias term at layers between (l) and (l-1).
     //      L - loss function (MSE in current implementation)
+    //      k - learning rate coefficient
     // Note:
     //      Indexes in code may not match.
     //
