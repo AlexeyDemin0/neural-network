@@ -565,14 +565,18 @@ namespace NeuralNetwork::Math
     template<typename T>
     std::ostream& operator<<(std::ostream& stream, const Matrix<T>& matrix)
     {
+        stream << std::setprecision(5) << std::scientific;
         for (int row = 0; row < matrix._rows; row++)
         {
             for (int col = 0; col < matrix._cols; col++)
             {
-                stream << std::setprecision(5) << std::scientific << matrix._matrix[row][col] << " ";
+                if (matrix._matrix[row][col] > 0)
+                    stream << " ";
+                stream << matrix._matrix[row][col] << " ";
             }
             stream << std::endl;
         }
+        stream << std::defaultfloat;
         return stream;
     }
 
