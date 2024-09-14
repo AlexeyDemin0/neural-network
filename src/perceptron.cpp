@@ -167,7 +167,7 @@ namespace NeuralNetwork
         layerIndex--;
 
         // Hidden layers
-        for (; layerIndex > 0; layerIndex--)
+        for (; layerIndex >= 0; layerIndex--)
         {
             Math::Matrix<T>::MultTransposedToMatrixAndStoreTo(_weights[layerIndex + 1], _deltas[layerIndex + 1], _deltas[layerIndex]);
             _deltas[layerIndex].HadamardProductThis(_derivatives[layerIndex]);
