@@ -7,4 +7,4 @@ add_library(${PROJECT_NAME} STATIC
 	"math/functions.cpp"
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/src)
