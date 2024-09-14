@@ -38,5 +38,8 @@ namespace NeuralNetwork
 
         void InitTrainCache();
         void ClearTrainCache();
+
+        template<typename U>
+        friend std::ostream& operator<<(std::ostream& stream, const Perceptron<U>& perceptron);
     };
 }

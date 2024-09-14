@@ -236,6 +236,21 @@ namespace NeuralNetwork
         _deltasBiasInertia.clear();
     }
 
+    template<typename U>
+    std::ostream& operator<<(std::ostream& stream, const Perceptron<U>& perceptron)
+    {
+
+        for (int layerIndex = 0; layerIndex < perceptron._weights.size(); layerIndex++)
+        {
+            std::cout << "w" << layerIndex << std::endl << perceptron._weights[layerIndex];
+            std::cout << "b" << layerIndex << std::endl << perceptron._bias[layerIndex];
+        }
+        return stream;
+    }
+
+    template std::ostream& operator<<(std::ostream& stream, const Perceptron<float>& perceptron);
+    template std::ostream& operator<<(std::ostream& stream, const Perceptron<double>& perceptron);
+
     template class Perceptron<float>;
     template class Perceptron<double>;
 }
