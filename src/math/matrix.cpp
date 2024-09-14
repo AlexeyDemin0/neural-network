@@ -226,6 +226,22 @@ namespace NeuralNetwork::Math
     }
 
     template<typename T>
+    Matrix<T>& Matrix<T>::MultAndStoreThis(const Matrix<T>& lhv, const T& value)
+    {
+        if (_rows != lhv._rows && _cols != lhv._cols)
+            throw std::invalid_argument("Size of matrix not equal size of current matrix");
+
+        for (int row = 0; row < lhv._rows; row++)
+        {
+            for (int col = 0; col < lhv._cols; col++)
+            {
+                _matrix[row][col] = lhv._matrix[row][col] * value;
+            }
+        }
+        return *this;
+    }
+
+    template<typename T>
     Matrix<T>& Matrix<T>::ApplyFunction(T(*func)(T))
     {
         for (int row = 0; row < _rows; row++)

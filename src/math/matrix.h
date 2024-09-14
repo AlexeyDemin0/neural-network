@@ -42,6 +42,7 @@ namespace NeuralNetwork::Math
         Matrix<T>& TransposeThis();
 
         Matrix<T>& MultAndStoreThis(const Matrix<T>& lhv, const Matrix<T>& rhv);
+        Matrix<T>& MultAndStoreThis(const Matrix<T>& lhv, const T& value);
 
         Matrix<T>& ApplyFunction(T(*func)(T));
 
