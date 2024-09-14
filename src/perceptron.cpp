@@ -146,7 +146,7 @@ namespace NeuralNetwork
     //      Indexes in code may not match.
     //
     template<typename T>
-    void Perceptron<T>::BackwardPropagation(const Math::Matrix<T>& idealValues, T learningRate)
+    void Perceptron<T>::BackwardPropagation(const Math::Matrix<T>& idealValues, T learningRate, T moment)
     {
         int layerIndex = _layers.size() - 2;
         _deltas[layerIndex] = _layers[layerIndex + 1];
@@ -156,6 +156,14 @@ namespace NeuralNetwork
 
         Math::Matrix<T>::MultMatrixToTransposedAndStoreTo(_deltas[layerIndex], _layers[layerIndex], _deltasWeights[layerIndex]);
         _deltasBias[layerIndex] = _deltas[layerIndex];
+
+        _deltasWeightsInertia[layerIndex] *= moment;
+        _deltasBiasInertia[layerIndex] *= moment;
+        _deltasWeights[layerIndex] *= (static_cast<T>(1.0) - moment);
+        _deltasBias[layerIndex] *= (static_cast<T>(1.0) - moment);
+        _deltasWeightsInertia[layerIndex] += _deltasWeights[layerIndex];
+        _deltasBiasInertia[layerIndex] += _deltasBias[layerIndex];
+
         layerIndex--;
 
         // Hidden layers
@@ -166,13 +174,20 @@ namespace NeuralNetwork
 
             Math::Matrix<T>::MultMatrixToTransposedAndStoreTo(_deltas[layerIndex], _layers[layerIndex], _deltasWeights[layerIndex]);
             _deltasBias[layerIndex] = _deltas[layerIndex];
+
+            _deltasWeightsInertia[layerIndex] *= moment;
+            _deltasBiasInertia[layerIndex] *= moment;
+            _deltasWeights[layerIndex] *= (static_cast<T>(1.0) - moment);
+            _deltasBias[layerIndex] *= (static_cast<T>(1.0) - moment);
+            _deltasWeightsInertia[layerIndex] += _deltasWeights[layerIndex];
+            _deltasBiasInertia[layerIndex] += _deltasBias[layerIndex];
         }
 
         // Weights adjusting
         for (int weightIndex = 0; weightIndex < _weights.size(); weightIndex++)
         {
-            _deltasWeights[weightIndex] *= learningRate;
-            _deltasBias[weightIndex] *= learningRate;
+            _deltasWeights[weightIndex].MultAndStoreThis(_deltasWeightsInertia[weightIndex], learningRate);
+            _deltasBias[weightIndex].MultAndStoreThis(_deltasBiasInertia[weightIndex], learningRate);
 
             _weights[weightIndex] -= _deltasWeights[weightIndex];
             _bias[weightIndex] -= _deltasBias[weightIndex];
@@ -192,6 +207,8 @@ namespace NeuralNetwork
         _deltas.resize(layersCount - 1);
         _deltasWeights.resize(layersCount - 1);
         _deltasBias.resize(layersCount - 1);
+        _deltasWeightsInertia.resize(layersCount - 1);
+        _deltasBiasInertia.resize(layersCount - 1);
 
         for (int i = 0; i < layersCount - 1; i++)
         {
@@ -202,6 +219,8 @@ namespace NeuralNetwork
             _deltas[i] = Math::Matrix<T>(_layers[i + 1].GetRows(), 1, false);
             _deltasWeights[i] = Math::Matrix<T>(neuronsCountNext, neuronsCountCurrent, false);
             _deltasBias[i] = Math::Matrix<T>(neuronsCountNext, 1, false);
+            _deltasWeightsInertia[i] = Math::Matrix<T>(neuronsCountNext, neuronsCountCurrent);
+            _deltasBiasInertia[i] = Math::Matrix<T>(neuronsCountNext, 1);
         }
     }
 
@@ -213,6 +232,8 @@ namespace NeuralNetwork
         _deltas.clear();
         _deltasWeights.clear();
         _deltasBias.clear();
+        _deltasWeightsInertia.clear();
+        _deltasBiasInertia.clear();
     }
 
     template class Perceptron<float>;

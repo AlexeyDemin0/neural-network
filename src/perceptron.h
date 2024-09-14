@@ -19,6 +19,9 @@ namespace NeuralNetwork
         std::vector<Math::Matrix<T>> _deltasWeights;
         std::vector<Math::Matrix<T>> _deltasBias;
 
+        std::vector<Math::Matrix<T>> _deltasWeightsInertia;
+        std::vector<Math::Matrix<T>> _deltasBiasInertia;
+
         bool _cacheIsInitialized;
 
     public:
@@ -31,7 +34,7 @@ namespace NeuralNetwork
         const Math::Matrix<T>& ForwardPropagation(T(*activationFunction)(T));
 
         const Math::Matrix<T>& ForwardPropagationWithCache(T(*activationFunction)(T), T(*derivativeFunction)(T), bool cacheAfterActivationFunction = false);
-        void BackwardPropagation(const Math::Matrix<T>& idealValues, T learningRate);
+        void BackwardPropagation(const Math::Matrix<T>& idealValues, T learningRate, T moment);
 
         void InitTrainCache();
         void ClearTrainCache();
