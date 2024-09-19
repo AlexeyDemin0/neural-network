@@ -1,0 +1,3 @@
+[submodule "net-core"]
+	path = net-core
+	url = https://github.com/AlexeyDemin0/net-core.git
